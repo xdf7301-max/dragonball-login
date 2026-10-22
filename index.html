@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Key - Dragon Ball Z</title>
+    <!-- Iconos para candado, usuario y sonido -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            background-color: #0b0f19;
+        }
+
+        /* Video de fondo */
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        /* Capa semitransparente oscura */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: -1;
+        }
+
+        /* Botón Flotante para Audio/Música */
+        .audio-control-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #fff;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .audio-control-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+
+        /* Tarjeta Glassmorphism */
+        .login-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            color: #fff;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Contenedor de la Imagen / Logo */
+        .profile-img-container {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 1.2rem auto;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .login-card h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.8rem;
+            letter-spacing: 0.5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Campos de Entrada */
+        .input-box {
+            position: relative;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .input-box label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            color: #e0e0e0;
+        }
+
+        .input-field {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-field input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1.5px solid rgba(255, 255, 255, 0.7);
+            padding: 0.5rem 2rem 0.5rem 0;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-field input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .input-field input:focus {
+            border-bottom-color: #00ffff;
+        }
+
+        .input-field i {
+            position: absolute;
+            right: 0.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+        }
+
+        /* Opciones de Recordar */
+        .options {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            font-size: 0.75rem;
+            margin-bottom: 1.8rem;
+            color: #e0e0e0;
+        }
+
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+        }
+
+        /* Botón Blanco */
+        .btn-submit {
+            width: 100%;
+            padding: 0.75rem;
+            background: #ffffff;
+            color: #111;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-submit:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .error-msg {
+            color: #ff4d4d;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+            display: none;
+            font-weight: 500;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .dashboard {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            color: #fff;
+            max-width: 450px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        .dashboard h1 {
+            color: #ffcc00;
+            margin-bottom: 1rem;
+        }
+
+        .dashboard p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            color: #e0e0e0;
+        }
+
+        .logout-btn {
+            background: #ff3333;
+            color: #fff;
+            border: none;
+            padding: 0.6rem 1.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Botón de Control de Audio -->
+    <button class="audio-control-btn" id="audioToggleBtn" onclick="toggleAudio()" title="Activar / Desactivar Sonido">
+        <i class="fa-solid fa-volume-xmark" id="audioIcon"></i>
+    </button>
+
+    <!-- Video de fondo (fondo.mp4 en la misma carpeta) -->
+    <video id="bgVideo" autoplay muted loop class="bg-video">
+        <source src="fondo.mp4" type="video/mp4">
+    </video>
+
+    <div class="overlay"></div>
+
+    <!-- Tarjeta de Login -->
+    <div id="loginCard" class="login-card">
+        
+        <!-- Imagen de perfil / logo -->
+        <div class="profile-img-container">
+            <img src="imagen.png" alt="Dragon Ball Character" id="profileImage">
+        </div>
+
+        <h2>Iniciar Sesión</h2>
+        
+        <form onsubmit="handleLogin(event)">
+            <div class="input-box">
+                <label>Usuario / Email</label>
+                <div class="input-field">
+                    <input type="text" id="userInput" placeholder="Ej. Goku Z">
+                    <i class="fa-regular fa-user"></i>
+                </div>
+            </div>
+
+            <div class="input-box">
+                <label>Key de Acceso</label>
+                <div class="input-field">
+                    <input type="password" id="keyInput" placeholder="Ingresa tu Key">
+                    <i class="fa-solid fa-key"></i>
+                </div>
+            </div>
+
+            <div class="options">
+                <label>
+                    <input type="checkbox"> Recordar
+                </label>
+            </div>
+
+            <div id="errorMsg" class="error-msg">Por favor ingresa tu usuario y tu Key</div>
+
+            <button type="submit" class="btn-submit">Acceder</button>
+        </form>
+    </div>
+
+    <!-- Pantalla al acceder -->
+    <div id="dashboardCard" class="dashboard hidden">
+        <h1 id="welcomeUser">¡Bienvenido! 🐉</h1>
+        <p>Has ingresado con éxito al sistema. Las Esferas del Dragón están listas.</p>
+        <button class="logout-btn" onclick="handleLogout()">Cerrar Sesión</button>
+    </div>
+
+    <script>
+        // Función para controlar el audio del video
+        function toggleAudio() {
+            const video = document.getElementById('bgVideo');
+            const icon = document.getElementById('audioIcon');
+
+            if (video.muted) {
+                video.muted = false;
+                icon.className = 'fa-solid fa-volume-high';
+            } else {
+                video.muted = true;
+                icon.className = 'fa-solid fa-volume-xmark';
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('userInput').value.trim();
+            const key = document.getElementById('keyInput').value.trim();
+            const errorMsg = document.getElementById('errorMsg');
+
+            if (user === '' || key === '') {
+                errorMsg.innerText = 'Debes ingresar tu usuario y tu Key de acceso';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            errorMsg.style.display = 'none';
+            document.getElementById('welcomeUser').innerText = `¡Bienvenido, ${user}! 🐉`;
+            
+            document.getElementById('loginCard').classList.add('hidden');
+            document.getElementById('dashboardCard').classList.remove('hidden');
+        }
+
+        function handleLogout() {
+            document.getElementById('userInput').value = '';
+            document.getElementById('keyInput').value = '';
+            document.getElementById('dashboardCard').classList.add('hidden');
+            document.getElementById('loginCard').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
