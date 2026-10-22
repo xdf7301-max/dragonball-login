@@ -226,25 +226,28 @@
             background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 3rem;
+            padding: 3rem 2rem;
             border-radius: 20px;
             text-align: center;
             color: #fff;
-            max-width: 450px;
+            max-width: 420px;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
             animation: fadeIn 0.6s ease-in-out;
         }
 
         .dashboard h1 {
             color: #ffcc00;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
+            font-size: 1.6rem;
         }
 
         .dashboard p {
-            font-size: 1rem;
+            font-size: 1.05rem;
             line-height: 1.6;
             margin-bottom: 2rem;
-            color: #e0e0e0;
+            color: #ffffff;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         .logout-btn {
@@ -255,6 +258,11 @@
             border-radius: 20px;
             font-weight: 600;
             cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #e02828;
         }
     </style>
 </head>
@@ -313,8 +321,8 @@
 
     <!-- Pantalla al acceder -->
     <div id="dashboardCard" class="dashboard hidden">
-        <h1 id="welcomeUser">¡Bienvenido! 🐉</h1>
-        <p>Has ingresado con éxito al sistema. Las Esferas del Dragón están listas.</p>
+        <h1 id="welcomeUser">¡BIENVENID@! 🐉</h1>
+        <p>SOY FUERTE PERO CRISTO REY LO ES MAS</p>
         <button class="logout-btn" onclick="handleLogout()">Cerrar Sesión</button>
     </div>
 
@@ -346,7 +354,8 @@
             }
 
             errorMsg.style.display = 'none';
-            document.getElementById('welcomeUser').innerText = `¡Bienvenido, ${user}! 🐉`;
+            // Aquí se inyecta dinámicamente el nombre de usuario colocado en el formulario
+            document.getElementById('welcomeUser').innerText = `¡BIENVENID@, ${user}! 🐉`;
             
             document.getElementById('loginCard').classList.add('hidden');
             document.getElementById('dashboardCard').classList.remove('hidden');
